@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include "asciiHashMap.h"
 
 //The hash is the first letter of key, linking to entries
-int generateHashMap(hashMap *hMap)
+extern int generateHashMap(hashMap *hMap)
 {
     int i;
     for(i = ASCIISTART; i < ASCIIEND; i++){
@@ -41,7 +41,7 @@ int generateHashMap(hashMap *hMap)
 /*addKey will attempt to add a new key/value pair;
  * The value is this example is a counter
  * if the key already exists, it will only increment the value*/
-int addKey(hashMap *hMap, char *key, int len)
+extern int addKey(hashMap *hMap, char *key, int len)
 {
     //Check for overflow
     if(len > MAXKEYSZ){
@@ -75,7 +75,7 @@ int addKey(hashMap *hMap, char *key, int len)
 }
 
 //Just lists all entries in hashmap
-void printHashMap(hashMap *hMap)
+extern void printHashMap(hashMap *hMap)
 {
     printf("This hashmap has %d items:\n", hMap->totalCnt);
     int i;
@@ -93,7 +93,7 @@ void printHashMap(hashMap *hMap)
 }
 
 //Get the value of key in hashmap
-int getValue(hashMap *hMap, char *key)
+extern int getValue(hashMap *hMap, char *key)
 {
     //Get the applicable list from first letter of key
     hME *head = hMap[(int)key[0]].keys->next;
