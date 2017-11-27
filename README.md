@@ -1,2 +1,2 @@
 # ascii_hashtable
-Hashtable/map for generic use
+Hashtable/map modified for use with ircBotLib
