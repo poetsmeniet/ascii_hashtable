@@ -65,7 +65,7 @@ extern int addKey(hashMap *hMap, char *key, int len)
     curr->next = malloc(sizeof(hME));
     memcpy(curr->next->key, key, len);
     curr->next->key[len] = '\0';
-    curr->next->value++;
+    curr->next->value = 1;
     curr->next->next = NULL;
 
     //Increment totalCnt, nr of lements in hashtable
