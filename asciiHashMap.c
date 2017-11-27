@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include "asciiHashMap.h"
 
 //The hash is the first letter of key, linking to entries
-extern int generateHashMap(hashMap *hMap)
+int generateHashMap(hashMap *hMap)
 {
     int i;
     for(i = ASCIISTART; i < ASCIIEND; i++){
@@ -41,7 +41,7 @@ extern int generateHashMap(hashMap *hMap)
 /*addKey will attempt to add a new key/value pair;
  * The value is this example is a counter
  * if the key already exists, it will only increment the value*/
-extern int addKey(hashMap *hMap, char *key, int len)
+int addKey(hashMap *hMap, char *key, int replyNr, int len)
 {
     //Check for overflow
     if(len > MAXKEYSZ){
@@ -55,7 +55,8 @@ extern int addKey(hashMap *hMap, char *key, int len)
         curr = curr->next;
         
         //Check if key exists (collision)
-        if(memcmp(curr->key, key, len) == 0){
+        if(memcmp(curr->key, key, len) == 0\
+                && curr->replyNr == replyNr){
             curr->value++;
             return 0;
         }
@@ -65,6 +66,7 @@ extern int addKey(hashMap *hMap, char *key, int len)
     curr->next = malloc(sizeof(hME));
     memcpy(curr->next->key, key, len);
     curr->next->key[len] = '\0';
+    curr->next->replyNr = replyNr;
     curr->next->value = 1;
     curr->next->next = NULL;
 
@@ -75,7 +77,7 @@ extern int addKey(hashMap *hMap, char *key, int len)
 }
 
 //Just lists all entries in hashmap
-extern void printHashMap(hashMap *hMap)
+void printHashMap(hashMap *hMap)
 {
     printf("This hashmap has %d items:\n", hMap->totalCnt);
     int i;
@@ -86,22 +88,28 @@ extern void printHashMap(hashMap *hMap)
         if(head != NULL)
             printf("Listing all keys beginning with '%c' (%d):\n", firstLetter, firstLetter);
         while(head != NULL){
-            printf("\tKey: '%s', value: %d\n", head->key, head->value);
+            printf("\tKey: '%s', value: %d, replyNr: %d\n", head->key, head->value, head->replyNr);
             head = head->next;
         }
     }
 }
 
-//Get the value of key in hashmap
-extern int getValue(hashMap *hMap, char *key)
+//Get the value of key in hashmap, for specified replyNr
+int getValue(hashMap *hMap, char *key, int replyNr, int returnVal)
 {
     //Get the applicable list from first letter of key
     hME *head = hMap[(int)key[0]].keys->next;
 
     while(head != NULL){
         //printf("\tTest if '%s' cmp with '%s' (len: %d)\n", head->key, key, strlen(key));
-        if(memcmp(head->key, key, strlen(key)) == 0)
-            return head->value;
+        if(memcmp(head->key, key, strlen(key)) == 0\
+                && head->replyNr == replyNr){
+            if(returnVal == 0){
+                    return head->value;
+            }else if(returnVal == 1){
+                    return head->replyNr;
+            }
+        }
         head = head->next;
     }
     

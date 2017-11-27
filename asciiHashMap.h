@@ -29,7 +29,8 @@ freely, subject to the following restrictions:
 //Key/value pairs, linked list
 typedef struct hashMapEntry{
     char key[MAXKEYSZ]; 
-    int value;
+    int value; //Int value, a counter. maps to 0 for getValue
+    int replyNr; //This number relates to line cnt of replies. maps to 1
     struct hashMapEntry *next;
 }hME;
 
@@ -47,15 +48,14 @@ extern int generateHashMap(hashMap *hMap);
 /*addKey will attempt to add a new key/value pair;
  * The value is this example is a counter
  * if the key already exists, it will only increment the value*/
-extern int addKey(hashMap *hMap, char *key, int len);
+extern int addKey(hashMap *hMap, char *key, int replyNr, int len);
 
 //Get the value of key in hashmap, -1 is not found
-extern int getValue(hashMap *hMap, char *key);
+extern int getValue(hashMap *hMap, char *key, int replyNr, int returnVal);
 
 //Just lists all entries in hashmap
 extern void printHashMap(hashMap *hMap);
 
 //Free the allocated memory
 extern int freeHashMap(hashMap *hMap);
-
 #endif
