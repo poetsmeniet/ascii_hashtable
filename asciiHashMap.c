@@ -79,7 +79,7 @@ int addKey(hashMap *hMap, char *key, int replyNr, int len)
 //Just lists all entries in hashmap
 void printHashMap(hashMap *hMap)
 {
-    printf("This hashmap has %d items:\n", hMap->totalCnt);
+    printf("This hashmap has %zu items:\n", hMap->totalCnt);
     int i;
     for(i = ASCIISTART; i < ASCIIEND; i++){
         char firstLetter = (char)i;
