@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 #include "asciiHashMap.h"
 
 //The hash is the first letter of key, linking to entries
-int generateHashMap(hashMap *hMap)
+extern int generateHashMap(hashMap *hMap)
 {
     int i;
     for(i = ASCIISTART; i < ASCIIEND; i++){
@@ -41,7 +41,7 @@ int generateHashMap(hashMap *hMap)
 /*addKey will attempt to add a new key/value pair;
  * The value is this example is a counter
  * if the key already exists, it will only increment the value*/
-int addKey(hashMap *hMap, char *key, int replyNr, int len)
+extern int addKey(hashMap *hMap, char *key, int replyNr, int len)
 {
     //Check for overflow
     if(len > MAXKEYSZ){
@@ -77,7 +77,7 @@ int addKey(hashMap *hMap, char *key, int replyNr, int len)
 }
 
 //Just lists all entries in hashmap
-void printHashMap(hashMap *hMap)
+extern void printHashMap(hashMap *hMap)
 {
     printf("This hashmap has %zu items:\n", hMap->totalCnt);
     int i;
@@ -95,7 +95,7 @@ void printHashMap(hashMap *hMap)
 }
 
 //Get the value of key in hashmap, for specified replyNr
-int getValue(hashMap *hMap, char *key, int replyNr, int returnVal)
+extern int getValue(hashMap *hMap, char *key, int replyNr, int returnVal)
 {
     //Get the applicable list from first letter of key
     hME *head = hMap[(int)key[0]].keys->next;
@@ -124,8 +124,10 @@ extern int freeHashMap(hashMap *hMap)
     for(i = ASCIISTART; i < ASCIIEND; i++){
         hME *curr = hMap[i].keys;
         while(curr != NULL){
+            hME *next = curr->next; //Store tmp pointer
             free(curr->key);
-            curr = curr->next;
+            curr = next;
+            next = NULL; //!Dangling pointer
         }
     }
     free(hMap);
