@@ -77,7 +77,7 @@ extern int addKey(hashMap *hMap, char *key, int len)
 //Just lists all entries in hashmap
 extern void printHashMap(hashMap *hMap)
 {
-    printf("This hashmap has %d items:\n", hMap->totalCnt);
+    printf("This hashmap has %zu items:\n", hMap->totalCnt);
     int i;
     for(i = ASCIISTART; i < ASCIIEND; i++){
         char firstLetter = (char)i;
@@ -99,7 +99,6 @@ extern int getValue(hashMap *hMap, char *key)
     hME *head = hMap[(int)key[0]].keys->next;
 
     while(head != NULL){
-        //printf("\tTest if '%s' cmp with '%s' (len: %d)\n", head->key, key, strlen(key));
         if(memcmp(head->key, key, strlen(key)) == 0)
             return head->value;
         head = head->next;
@@ -116,8 +115,10 @@ extern int freeHashMap(hashMap *hMap)
     for(i = ASCIISTART; i < ASCIIEND; i++){
         hME *curr = hMap[i].keys;
         while(curr != NULL){
+            hME *next = curr->next; //Store tmp pointer
             free(curr->key);
-            curr = curr->next;
+            curr = next;
+            next = NULL; //!Dangling pointer
         }
     }
     free(hMap);
